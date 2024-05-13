@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:map_project/log_in.dart';
-import 'package:map_project/toast.dart';
+import 'package:map_project/services/toast.dart';
 
 class HomePage extends StatefulWidget {
   @override

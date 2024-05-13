@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:map_project/firebase_auth.dart';
+import 'package:map_project/services/firebase_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:map_project/homepage.dart';
 import 'package:map_project/sign_up.dart';
-import 'package:map_project/toast.dart';
+import 'package:map_project/services/toast.dart';
 
 class LoginPage extends StatefulWidget {
   @override
