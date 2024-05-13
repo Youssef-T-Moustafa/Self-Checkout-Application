@@ -3,6 +3,7 @@ import 'package:map_project/firebase_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:map_project/homepage.dart';
 import 'package:map_project/sign_up.dart';
+import 'package:map_project/toast.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -10,6 +11,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  bool isLoading = false;
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   final FirebaseAuthService _auth = FirebaseAuthService();
@@ -41,7 +43,11 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(height: 16),
             ElevatedButton(
               onPressed: _signIn,
-              child: Text('Login'),
+              child: isLoading
+                  ? CircularProgressIndicator(
+                      color: Colors.white,
+                    )
+                  : Text('Login'),
             ),
             SizedBox(height: 16),
             TextButton(
@@ -58,16 +64,24 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _signIn() async {
+    setState(() {
+      isLoading = true;
+    });
     String email = _emailController.text;
     String password = _passwordController.text;
 
     User? user = await _auth.signInWithEmailAndPassword(email, password);
+    setState(() {
+      isLoading = false;
+    });
 
     if (user != null) {
+      showToast(message: "Login successful");
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => HomePage()));
       print("success");
     } else {
+      showToast(message: "Login failed");
       print("error");
     }
   }

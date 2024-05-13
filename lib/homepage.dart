@@ -1,7 +1,7 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:map_project/log_in.dart';
+import 'package:map_project/toast.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -19,6 +19,7 @@ class _HomePageState extends State<HomePage> {
         child: ElevatedButton(
           onPressed: () {
             FirebaseAuth.instance.signOut();
+            showToast(message: 'Sign Out Successfully');
             Navigator.pushReplacement(
                 context, MaterialPageRoute(builder: (context) => LoginPage()));
           },

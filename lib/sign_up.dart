@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:map_project/firebase_auth.dart';
 import 'package:map_project/homepage.dart';
+import 'package:map_project/toast.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -9,6 +10,7 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  bool isLoading = false;
   TextEditingController _firstNameController = TextEditingController();
   TextEditingController _lastNameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
@@ -165,10 +167,15 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
             ),
             ElevatedButton(
-                onPressed: () {
-                  _signUp();
-                },
-                child: Text('Sign Up'))
+              onPressed: () {
+                _signUp();
+              },
+              child: isLoading
+                  ? CircularProgressIndicator(
+                      color: Colors.white,
+                    )
+                  : Text('Sign Up'),
+            )
           ],
         ),
       ),
@@ -176,9 +183,9 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   void _signUp() async {
-    // setState(() {
-    //   isSigningUp = true;
-    // });
+    setState(() {
+      isLoading = true;
+    });
 
     String firstName = _firstNameController.text;
     String lastName = _lastNameController.text;
@@ -188,14 +195,17 @@ class _SignUpPageState extends State<SignUpPage> {
     String phoneNumber = _phoneNumberController.text;
 
     User? user = await _auth.signUpWithEmailAndPassword(email, password);
+    setState(() {
+      isLoading = false;
+    });
 
     if (user != null) {
-      await user.updateDisplayName(firstName + " " + lastName);
-
+      showToast(message: "User created successfully");
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => HomePage()));
       print("success");
     } else {
+      showToast(message: "User creation failed");
       print("error");
     }
   }
