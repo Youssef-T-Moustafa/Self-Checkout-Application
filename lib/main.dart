@@ -38,6 +38,9 @@ class MyApp extends StatelessWidget {
   }
 }
 
+
+
+/* Counter Application
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
@@ -46,6 +49,7 @@ class MyHomePage extends StatefulWidget {
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
+
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
@@ -105,3 +109,4 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+*/
