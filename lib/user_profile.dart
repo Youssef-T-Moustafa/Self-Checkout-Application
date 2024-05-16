@@ -7,16 +7,11 @@ class UserProfile extends StatefulWidget {
 
 class _UserProfileState extends State<UserProfile> {
   final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _phoneController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _dobController = TextEditingController();
-  final _usernameController = TextEditingController();
+  DateTime? _selectedDate;
 
   void _saveChanges() {
     if (_formKey.currentState?.validate() ?? false) {
-      // Save the changes here. You might want to interact with a backend or local storage.
+      // Save changes
     }
   }
 
@@ -24,64 +19,123 @@ class _UserProfileState extends State<UserProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Profile', textAlign: TextAlign.center),
-        centerTitle: true,
+        title: Text('User Profile'),
       ),
       body: Form(
         key: _formKey,
         child: ListView(
           padding: EdgeInsets.all(8.0),
           children: <Widget>[
-            CircleAvatar(
-              radius: 50,
-              // backgroundImage: NetworkImage(userImageUrl), // Add your user image url here
-            ),
-            TextFormField(
-              controller: _nameController,
-              decoration: InputDecoration(labelText: 'Name'),
-            ),
-            TextFormField(
-              controller: _emailController,
-              decoration: InputDecoration(labelText: 'Email'),
-            ),
-            TextFormField(
-              controller: _phoneController,
-              decoration: InputDecoration(labelText: 'Phone number'),
-            ),
-            TextFormField(
-              controller: _passwordController,
-              decoration: InputDecoration(labelText: 'Password'),
-              obscureText: true,
-            ),
-            TextFormField(
-              controller: _dobController,
-              decoration: InputDecoration(labelText: 'Date of birth'),
-            ),
-            TextFormField(
-              controller: _usernameController,
-              decoration: InputDecoration(labelText: 'Username'),
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors
-                    .red, // or use backgroundColor if primary is not available
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
-                ),
+            Center(
+              child: CircleAvatar(
+                radius: 100,
+                backgroundImage: NetworkImage(
+                    'https://media.newyorker.com/photos/59095bb86552fa0be682d9d0/master/pass/Monkey-Selfie.jpg'),
               ),
-              child: Text(
-                'Save changes',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Roboto',
-                ),
+            ),
+            SizedBox(height: 16.0),
+            _buildTextField('Username'),
+            SizedBox(height: 16.0),
+            _buildTextField('Name'),
+            SizedBox(height: 16.0),
+            _buildTextField('Email'),
+            SizedBox(height: 16.0),
+            _buildTextField('Phone Number'),
+            SizedBox(height: 16.0),
+            _buildTextField('Password', obscureText: true),
+            SizedBox(height: 16.0),
+            Text(
+              'Date of Birth',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
               ),
-              onPressed: _saveChanges,
+            ),
+            SizedBox(height: 8.0),
+            TextFormField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                filled: true,
+                fillColor: Colors.white, // Change the fill color to white
+                hintText: 'Date of Birth',
+              ),
+              readOnly: true,
+              onTap: () async {
+                final date = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(1900),
+                  lastDate: DateTime.now(),
+                );
+                if (date != null) {
+                  setState(() {
+                    _selectedDate = date;
+                  });
+                }
+              },
+            ),
+            SizedBox(height: 16.0),
+            Container(
+              height: 50.0,
+              width: MediaQuery.of(context).size.width *
+                  0.5, // Make the button less wide
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                        10), // Give the button rounded corners
+                  ),
+                ),
+                child: Text(
+                  'Save Changes',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Roboto',
+                  ),
+                ),
+                onPressed: _saveChanges,
+              ),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildTextField(String title, {bool obscureText = false}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
+        ),
+        SizedBox(height: 8.0),
+        TextFormField(
+          decoration: InputDecoration(
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            filled: true,
+            fillColor: Colors.white, // Change the fill color to white
+            hintText: title,
+          ),
+          obscureText: obscureText,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter some text';
+            }
+            return null;
+          },
+        ),
+      ],
     );
   }
 }
