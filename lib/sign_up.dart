@@ -19,21 +19,26 @@ class _SignUpPageState extends State<SignUpPage> {
   TextEditingController _confirmPasswordController = TextEditingController();
   TextEditingController _phoneNumberController = TextEditingController();
   final FirebaseAuthService _auth = FirebaseAuthService();
-  
+
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-Future<void> addUserToFirestore() async {
+  Future<void> addUserToFirestore() async {
     try {
-      await _firestore.collection('Swift').doc('Users').collection("AccountInfo").add({
+      await _firestore
+          .collection('Swift')
+          .doc('Users')
+          .collection("AccountInfo")
+          .add({
         'firstName': _firstNameController.text,
         'lastName': _lastNameController.text,
         //'email': _emailController.text,
         'phoneNumber': _phoneNumberController.text,
-        
       });
     } catch (e) {
       print(e.toString());
     }
-  }  @override
+  }
+
+  @override
   void dispose() {
     _firstNameController.dispose();
     _lastNameController.dispose();
@@ -48,7 +53,15 @@ Future<void> addUserToFirestore() async {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Sign Up'),
+        title: Text(
+          'Sign Up',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: Colors.orange, // Set the AppBar color to orange
+        centerTitle: true, // Center the title
+        elevation: 10.0, // Add some shadow
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -69,13 +82,15 @@ Future<void> addUserToFirestore() async {
                           fontSize: 18,
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blue, width: 2.0),
+                          borderSide:
+                              BorderSide(color: Colors.orange, width: 2.0),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey, width: 1.0),
+                          borderSide:
+                              BorderSide(color: Colors.grey, width: 1.0),
                         ),
                         filled: true,
-                        fillColor: Colors.white,
+                        fillColor: Colors.orange[50],
                       ),
                     ),
                   ),
@@ -90,13 +105,15 @@ Future<void> addUserToFirestore() async {
                           fontSize: 18,
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blue, width: 2.0),
+                          borderSide:
+                              BorderSide(color: Colors.orange, width: 2.0),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey, width: 1.0),
+                          borderSide:
+                              BorderSide(color: Colors.grey, width: 1.0),
                         ),
                         filled: true,
-                        fillColor: Colors.white,
+                        fillColor: Colors.orange[50],
                       ),
                     ),
                   ),
@@ -111,13 +128,15 @@ Future<void> addUserToFirestore() async {
                           fontSize: 18,
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blue, width: 2.0),
+                          borderSide:
+                              BorderSide(color: Colors.orange, width: 2.0),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey, width: 1.0),
+                          borderSide:
+                              BorderSide(color: Colors.grey, width: 1.0),
                         ),
                         filled: true,
-                        fillColor: Colors.white,
+                        fillColor: Colors.orange[50],
                       ),
                     ),
                   ),
@@ -132,13 +151,15 @@ Future<void> addUserToFirestore() async {
                           fontSize: 18,
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blue, width: 2.0),
+                          borderSide:
+                              BorderSide(color: Colors.orange, width: 2.0),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey, width: 1.0),
+                          borderSide:
+                              BorderSide(color: Colors.grey, width: 1.0),
                         ),
                         filled: true,
-                        fillColor: Colors.white,
+                        fillColor: Colors.orange[50],
                       ),
                     ),
                   ),
@@ -153,13 +174,15 @@ Future<void> addUserToFirestore() async {
                           fontSize: 18,
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blue, width: 2.0),
+                          borderSide:
+                              BorderSide(color: Colors.orange, width: 2.0),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey, width: 1.0),
+                          borderSide:
+                              BorderSide(color: Colors.grey, width: 1.0),
                         ),
                         filled: true,
-                        fillColor: Colors.white,
+                        fillColor: Colors.orange[50],
                       ),
                     ),
                   ),
@@ -174,26 +197,36 @@ Future<void> addUserToFirestore() async {
                           fontSize: 18,
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blue, width: 2.0),
+                          borderSide:
+                              BorderSide(color: Colors.orange, width: 2.0),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey, width: 1.0),
+                          borderSide:
+                              BorderSide(color: Colors.grey, width: 1.0),
                         ),
                         filled: true,
-                        fillColor: Colors.white,
+                        fillColor: Colors.orange[50],
                       ),
                     ),
                   ),
                   ElevatedButton(
-                    onPressed: () async {
+                    onPressed: () {
                       _signUp();
-                      await addUserToFirestore();
+                      addUserToFirestore();
                     },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          Colors.orange, // Set the button color to orange
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                      ),
+                    ),
                     child: isLoading
                         ? CircularProgressIndicator(
                             color: Colors.white,
                           )
-                        : Text('Sign Up'),
+                        : Text('Sign Up',
+                            style: TextStyle(color: Colors.white)),
                   ),
                 ],
               ),
