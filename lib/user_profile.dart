@@ -60,6 +60,10 @@ class _UserProfileState extends State<UserProfile> {
                         MaterialPageRoute(builder: ((context) => HomePage())));
                   },
                 ),
+                backgroundColor:
+                    Colors.orange, // Set the AppBar color to orange
+                centerTitle: true, // Center the title
+                elevation: 10.0, // Add some shadow
               ),
               body: Form(
                 key: _formKey,
