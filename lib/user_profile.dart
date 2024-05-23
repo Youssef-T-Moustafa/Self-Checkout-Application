@@ -73,7 +73,7 @@ class _UserProfileState extends State<UserProfile> {
                     Center(
                       child: CircleAvatar(
                         radius: 100,
-                        backgroundImage: NetworkImage('images/monkey.jpeg'),
+                        backgroundImage: AssetImage('images/monkey.jpeg'),
                       ),
                     ),
                     SizedBox(height: 16.0),
