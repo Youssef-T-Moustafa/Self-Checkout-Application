@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:map_project/homepage.dart';
+import 'package:map_project/models/cartModel.dart';
 import 'package:map_project/user_profile.dart';
 import 'package:flutter/foundation.dart';
 import 'package:map_project/log_in.dart';
 import 'package:map_project/sign_up.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,7 +23,12 @@ Future main() async {
     await Firebase.initializeApp();
   }
 
-  runApp(MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => Cart(),
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -34,7 +42,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: LoginPage(),
+      home: HomePage(),
     );
   }
 }
