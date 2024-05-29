@@ -10,4 +10,15 @@ class Product {
     required this.price,
     required this.imageUrl,
   });
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is Product &&
+        other.name == name; // compare other properties as needed
+  }
+
+  @override
+  int get hashCode => name.hashCode;
 }

@@ -100,6 +100,31 @@ class _HomePageState extends State<HomePage> {
             label: 'Profile',
           ),
         ],
+        onTap: (index) {
+          switch (index) {
+            case 0:
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => HomePage()));
+              break;
+            case 1:
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => HomePage()));
+              break;
+            case 2:
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => BarcodeScanner()));
+              break;
+            case 3:
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => CartPage()));
+              break;
+            case 4:
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => UserProfile()));
+              break;
+          }
+
+        },
       ),
     );
   }
