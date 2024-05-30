@@ -4,6 +4,7 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:map_project/homepage.dart';
 import 'package:map_project/models/cartModel.dart';
 import 'package:map_project/models/productModel.dart';
+import 'package:map_project/services/toast.dart';
 import 'package:provider/provider.dart';
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -115,6 +116,7 @@ class _BarcodeScanner extends State<BarcodeScanner> {
                 imageUrl: documentData['imageUrl'],
               );
               Provider.of<Cart>(context, listen: false).addProduct(product);
+              showToast(message: "Product added to the cart.");
             },
             child: Text('Add to cart'),
           )
