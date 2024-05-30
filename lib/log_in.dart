@@ -1,10 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:map_project/account_recovery.dart';
-import 'package:map_project/services/firebase_auth.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:map_project/homepage.dart';
-import 'package:map_project/sign_up.dart';
+import 'package:map_project/services/firebase_auth.dart';
 import 'package:map_project/services/toast.dart';
+import 'package:map_project/sign_up.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -129,7 +129,7 @@ class _LoginPageState extends State<LoginPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => ForgotPasswordPage()),
+                        builder: (context) => AccountRecoveryPage()),
                   );
                 },
                 child: Text('Forgot Password?',
