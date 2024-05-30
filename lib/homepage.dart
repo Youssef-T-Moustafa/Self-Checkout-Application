@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:map_project/cart_page.dart';
 import 'package:map_project/log_in.dart';
 import 'package:map_project/services/toast.dart';
 import 'package:map_project/barcode_scanner.dart';
@@ -60,6 +61,17 @@ class _HomePageState extends State<HomePage> {
               child: const Text('User Profile'),
             ),
           ),
+          Center(
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CartPage()),
+                );
+              },
+              child: Text('View Cart'),
+            ),
+          )
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -88,6 +100,31 @@ class _HomePageState extends State<HomePage> {
             label: 'Profile',
           ),
         ],
+        onTap: (index) {
+          switch (index) {
+            case 0:
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => HomePage()));
+              break;
+            case 1:
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => HomePage()));
+              break;
+            case 2:
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => BarcodeScanner()));
+              break;
+            case 3:
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => CartPage()));
+              break;
+            case 4:
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => UserProfile()));
+              break;
+          }
+
+        },
       ),
     );
   }

@@ -60,6 +60,10 @@ class _UserProfileState extends State<UserProfile> {
                         MaterialPageRoute(builder: ((context) => HomePage())));
                   },
                 ),
+                backgroundColor:
+                    Colors.orange, // Set the AppBar color to orange
+                centerTitle: true, // Center the title
+                elevation: 10.0, // Add some shadow
               ),
               body: Form(
                 key: _formKey,
@@ -69,7 +73,7 @@ class _UserProfileState extends State<UserProfile> {
                     Center(
                       child: CircleAvatar(
                         radius: 100,
-                        backgroundImage: NetworkImage('images/monkey.jpeg'),
+                        backgroundImage: AssetImage('images/monkey.jpeg'),
                       ),
                     ),
                     SizedBox(height: 16.0),

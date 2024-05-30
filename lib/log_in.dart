@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:map_project/account_recovery.dart';
 import 'package:map_project/services/firebase_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:map_project/homepage.dart';
@@ -122,6 +123,17 @@ class _LoginPageState extends State<LoginPage> {
                       MaterialPageRoute(builder: (context) => SignUpPage()));
                 },
                 child: Text('Sign Up', style: TextStyle(color: Colors.orange)),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ForgotPasswordPage()),
+                  );
+                },
+                child: Text('Forgot Password?',
+                    style: TextStyle(color: Colors.orange)),
               ),
             ],
           ),
