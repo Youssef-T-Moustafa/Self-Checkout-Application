@@ -1,9 +1,15 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+<<<<<<< HEAD
 import 'package:map_project/cart_page.dart';
 import 'package:map_project/log_in.dart';
 import 'package:map_project/services/toast.dart';
+=======
+import 'package:flutter/material.dart';
+>>>>>>> 307f5fa5c3f8c07e0fe38de5bb3f96cf88fd6636
 import 'package:map_project/barcode_scanner.dart';
+import 'package:map_project/log_in.dart';
+import 'package:map_project/product_browsing.dart';
+import 'package:map_project/services/toast.dart';
 import 'package:map_project/user_profile.dart';
 
 class HomePage extends StatefulWidget {
@@ -12,11 +18,45 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+
+    switch (index) {
+      case 0:
+        // Home
+        break;
+      case 1:
+        // Notifications
+        break;
+      case 2:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => BarcodeScanner()),
+        );
+        break;
+      case 3:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ProductBrowsingPage()),
+        );
+        break;
+      case 4:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => UserProfile()),
+        );
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:
-          Colors.orange[50], // Set the background color to light orange
+      backgroundColor: Colors.orange[50], // Set the background color to light orange
       appBar: AppBar(
         title: Text(
           'Home Page',
@@ -28,6 +68,7 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true, // Center the title
         elevation: 10.0, // Add some shadow
       ),
+<<<<<<< HEAD
       body: Column(
         children: [
           Center(
@@ -73,11 +114,26 @@ class _HomePageState extends State<HomePage> {
             ),
           )
         ],
+=======
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            FirebaseAuth.instance.signOut();
+            showToast(message: 'Sign Out Successfully');
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => LoginPage()),
+            );
+          },
+          child: Text('Sign Out'),
+        ),
+>>>>>>> 307f5fa5c3f8c07e0fe38de5bb3f96cf88fd6636
       ),
       bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
         selectedItemColor: Colors.grey, // Set the color of the selected item
-        unselectedItemColor:
-            Colors.black, // Set the color of the unselected items
+        unselectedItemColor: Colors.black, // Set the color of the unselected items
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -93,7 +149,7 @@ class _HomePageState extends State<HomePage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_cart),
-            label: 'Cart',
+            label: 'Products',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
