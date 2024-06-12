@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class Product {
   final String name;
@@ -16,17 +18,17 @@ class CartItem {
   double get totalPrice => product.price * quantity;
 }
 
-class Cart {
+class Carts {
   List<CartItem> items;
 
-  Cart({required this.items});
+  Carts({required this.items});
 
   double get totalPrice =>
       items.fold(0, (total, current) => total + current.totalPrice);
 }
 
 class CheckoutPage extends StatefulWidget {
-  final Cart cart;
+  final Carts cart;
 
   CheckoutPage({required this.cart});
 
@@ -38,6 +40,55 @@ class _CheckoutPageState extends State<CheckoutPage> {
   String? deliveryOption;
   String? paymentOption;
   String address = 'Platinum Splendor, 54000 Kuala Lumpur';
+
+  Future<void> sendReceiptEmail(String receiptDetails) async {
+    try {
+      final response = await http.post(
+        Uri.parse('http://localhost:3000/send-receipt'), // Local server URL
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'receiptDetails': receiptDetails,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        print('Email sent successfully');
+      } else {
+        print('Failed to send email: ${response.body}');
+      }
+    } catch (e) {
+      print('Error sending email: $e');
+    }
+  }
+
+  void onPaymentSuccess() {
+    String receiptDetails = widget.cart.items
+            .map((item) =>
+                '${item.quantity} x ${item.product.name} (\$${item.product.price})')
+            .join(', ') +
+        '. Total: \$${widget.cart.totalPrice}';
+
+    sendReceiptEmail(receiptDetails);
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Payment Confirmed'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,20 +117,20 @@ class _CheckoutPageState extends State<CheckoutPage> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               ElevatedButton(
-                onPressed: deliveryOption == ' Home Delivery'
+                onPressed: deliveryOption == 'Home Delivery'
                     ? null
                     : () {
                         setState(() {
                           deliveryOption = 'Home Delivery';
                         });
                       },
-                child: Text(' Home Delivery'),
+                child: Text('Home Delivery'),
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.resolveWith<Color>(
                     (Set<MaterialState> states) {
                       if (states.contains(MaterialState.disabled))
                         return Colors.grey;
-                      return Colors.blue; // Use the component's default.
+                      return Colors.blue;
                     },
                   ),
                 ),
@@ -98,7 +149,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     (Set<MaterialState> states) {
                       if (states.contains(MaterialState.disabled))
                         return Colors.grey;
-                      return Colors.blue; // Use the component's default.
+                      return Colors.blue;
                     },
                   ),
                 ),
@@ -137,7 +188,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     (Set<MaterialState> states) {
                       if (states.contains(MaterialState.disabled))
                         return Colors.grey;
-                      return Colors.blue; // Use the component's default.
+                      return Colors.blue;
                     },
                   ),
                 ),
@@ -156,7 +207,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     (Set<MaterialState> states) {
                       if (states.contains(MaterialState.disabled))
                         return Colors.grey;
-                      return Colors.blue; // Use the component's default.
+                      return Colors.blue;
                     },
                   ),
                 ),
@@ -175,7 +226,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     (Set<MaterialState> states) {
                       if (states.contains(MaterialState.disabled))
                         return Colors.grey;
-                      return Colors.blue; // Use the component's default.
+                      return Colors.blue;
                     },
                   ),
                 ),
@@ -186,22 +237,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
           ElevatedButton(
             onPressed: (deliveryOption != null && paymentOption != null)
                 ? () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: Text('Payment Confirmed'),
-                          actions: <Widget>[
-                            TextButton(
-                              child: Text('OK'),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                          ],
-                        );
-                      },
-                    );
+                    onPaymentSuccess();
                   }
                 : null,
             child: Text('Pay'),
@@ -210,7 +246,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 (Set<MaterialState> states) {
                   if (states.contains(MaterialState.disabled))
                     return Colors.grey;
-                  return Colors.green; // Use the component's default.
+                  return Colors.green;
                 },
               ),
             ),
@@ -224,10 +260,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
 void main() {
   runApp(MaterialApp(
     home: CheckoutPage(
-      cart: Cart(
+      cart: Carts(
         items: [
-          CartItem(product: Product(name: 'Loai Juice', price: 10.0)),
-          CartItem(product: Product(name: 'Siam Juice', price: 20.0)),
+          CartItem(product: Product(name: 'Hamido-Goreng-Kunyit', price: 6.7)),
         ],
       ),
     ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:map_project/cart_page.dart';
+import 'package:map_project/checkout.dart'; // Import checkout.dart here
 import 'package:map_project/log_in.dart';
 import 'package:map_project/services/toast.dart';
 import 'package:map_project/barcode_scanner.dart';
@@ -12,6 +13,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final Carts cart = Carts(items: [
+    CartItem(product: Product(name: 'Hamido-Goreng-Kunyit', price: 6.7)),
+  ]);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,7 +76,19 @@ class _HomePageState extends State<HomePage> {
               },
               child: Text('View Cart'),
             ),
-          )
+          ),
+          Center(
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CheckoutPage(cart: cart)),
+                );
+              },
+              child: Text('Checkout'),
+            ),
+          ),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -103,27 +120,26 @@ class _HomePageState extends State<HomePage> {
         onTap: (index) {
           switch (index) {
             case 0:
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => HomePage()));
+              Navigator.pushReplacement(
+                  context, MaterialPageRoute(builder: (context) => HomePage()));
               break;
             case 1:
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => HomePage()));
+              Navigator.pushReplacement(
+                  context, MaterialPageRoute(builder: (context) => HomePage()));
               break;
             case 2:
               Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: (context) => BarcodeScanner()));
               break;
             case 3:
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => CartPage()));
+              Navigator.pushReplacement(
+                  context, MaterialPageRoute(builder: (context) => CartPage()));
               break;
             case 4:
               Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: (context) => UserProfile()));
               break;
           }
-
         },
       ),
     );
