@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:map_project/homepage.dart';
 import 'package:provider/provider.dart';
 import 'package:map_project/models/cartModel.dart';
 
@@ -7,7 +8,16 @@ class CartPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Your Cart'),
+        title: Text('Shopping Cart'),
+        leading: BackButton(
+          onPressed: () {
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: ((context) => HomePage())));
+          },
+        ),
+        backgroundColor: Colors.orange, // Set the AppBar color to orange
+        centerTitle: true, // Center the title
+        elevation: 10.0, // Add some shadow
       ),
       body: Consumer<Cart>(
         builder: (context, cart, child) {
