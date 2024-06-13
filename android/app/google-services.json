@@ -1,44 +1,26 @@
 {
   "project_info": {
-    "project_number": "457501069566",
-    "firebase_url": "https://swift-shop-4e300-default-rtdb.asia-southeast1.firebasedatabase.app",
-    "project_id": "swift-shop-4e300",
-    "storage_bucket": "swift-shop-4e300.appspot.com"
+    "project_number": "498666861049",
+    "project_id": "map-project-86de7",
+    "storage_bucket": "map-project-86de7.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:457501069566:android:6506e0e4bb95d002d995af",
+        "mobilesdk_app_id": "1:498666861049:android:96cd4c2c35338ab338cd28",
         "android_client_info": {
           "package_name": "com.example.map_project"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "457501069566-kl7q4495tanns80sq21cj4ql1pl2236i.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCF1QAFmqiqehPx6xZTrMY8j_3huuuAHWo"
+          "current_key": "AIzaSyCtQ6ly7zlSuTw7q1v82SOY7iruPW17r3A"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "457501069566-kl7q4495tanns80sq21cj4ql1pl2236i.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "457501069566-ub48j5p7fgf5lvq242eo5v6ihqh5mdko.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.mapProject"
-              }
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }
