@@ -1,18 +1,14 @@
 class Product {
   final String name;
   final String description;
-  final String imageUrl;
-  final String category;
   final double price;
-  final double discountedPrice;
+  final String imageUrl;
 
   Product({
     required this.name,
     required this.description,
-    required this.imageUrl,
-    required this.category,
     required this.price,
-    required this.discountedPrice,
+    required this.imageUrl,
   });
 
   @override
