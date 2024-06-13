@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:map_project/barcode_scanner.dart';
+import 'package:map_project/cart_page.dart';
 import 'package:map_project/log_in.dart';
-import 'package:map_project/product_browsing.dart';
 import 'package:map_project/services/toast.dart';
+import 'package:map_project/barcode_scanner.dart';
+import 'package:map_project/order_page.dart';
 import 'package:map_project/user_profile.dart';
 import 'package:map_project/models/productModel.dart';
 
@@ -136,6 +138,14 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Colors.orange[50],
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.sick_outlined),
+          onPressed: () {
+            // Add your onPressed code here!
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (context) => OrderPage()));
+          },
+        ),
         title: Text(
           'Home Page',
           style: TextStyle(
@@ -253,7 +263,7 @@ class _HomePageState extends State<HomePage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_cart),
-            label: 'Products',
+            label: 'Cart',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),

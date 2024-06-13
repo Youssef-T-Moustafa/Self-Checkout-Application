@@ -1,12 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class AccountRecoveryPage extends StatefulWidget {
+class ForgotPasswordPage extends StatefulWidget {
   @override
-  _AccountRecoveryPage createState() => _AccountRecoveryPage();
+  _ForgotPasswordPageState createState() => _ForgotPasswordPageState();
 }
 
-class _AccountRecoveryPage extends State<AccountRecoveryPage> {
+class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final _emailController = TextEditingController();
 
   @override
