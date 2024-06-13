@@ -1,34 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:map_project/cart_page.dart';
-import 'package:map_project/log_in.dart';
-import 'package:map_project/services/toast.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:map_project/barcode_scanner.dart';
-import 'package:map_project/order_page.dart';
+import 'package:map_project/homepage.dart';
 import 'package:map_project/user_profile.dart';
 
-class HomePage extends StatefulWidget {
-  @override
-  _HomePageState createState() => _HomePageState();
+Future<List<DocumentSnapshot>> fetchData() async {
+  QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+      .collection('Swift')
+      .doc("History")
+      .collection("Orders")
+      .get();
+  return querySnapshot.docs;
 }
 
-class _HomePageState extends State<HomePage> {
+class OrderPage extends StatefulWidget {
+  @override
+  _OrderPageState createState() => _OrderPageState();
+}
+
+class _OrderPageState extends State<OrderPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor:
           Colors.orange[50], // Set the background color to light orange
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.sick_outlined),
-          onPressed: () {
-            // Add your onPressed code here!
-            Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => OrderPage()));
-          },
-        ),
         title: Text(
-          'Home Page',
+          'Order History',
           style: TextStyle(
             fontWeight: FontWeight.bold,
           ),
@@ -36,54 +35,35 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.orange, // Set the AppBar color to orange
         centerTitle: true, // Center the title
         elevation: 10.0, // Add some shadow
-              
       ),
-      body: Column(
-        children: [
-          Center(
-            child: ElevatedButton(
-              onPressed: () {
-                FirebaseAuth.instance.signOut();
-                showToast(message: 'Sign Out Successfully');
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => LoginPage()));
-              },
-              child: Text('Sign Out'),
-            ),
-          ),
-          const SizedBox(height: 20.0),
-          Center(
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => BarcodeScanner()));
-              },
-              child: const Text('Scanner'),
-            ),
-          ),
-          const SizedBox(height: 20.0),
-          Center(
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => UserProfile()));
-              },
-              child: const Text('User Profile'),
-            ),
-          ),
-          Center(
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => CartPage()),
+
+      body: FutureBuilder<List<DocumentSnapshot>>(
+        future: fetchData(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Center(child: Text('No data found'));
+          } else {
+            return ListView(
+              children: snapshot.data!.map((document) {
+                var data = document.data() as Map<String, dynamic>;
+                return ListTile(
+                  title: Text(data['Item'] ?? 'No Item'),
+                  subtitle: Text("Bought on: ${data['Date'] ?? 'No data'}"),
+                  trailing: Text("\$ ${data['Price'] ?? 'No Item'}",
+                    style: TextStyle(fontSize: 18), // Set the font size to 18
+                  ),
+                  isThreeLine: true,
                 );
-              },
-              child: Text('View Cart'),
-            ),
-          )
-        ],
+              }).toList(),
+            );
+          }
+        },
       ),
+
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: Colors.grey, // Set the color of the selected item
         unselectedItemColor:
