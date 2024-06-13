@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:map_project/cart_page.dart';
 import 'package:map_project/log_in.dart';
@@ -8,6 +7,7 @@ import 'package:map_project/barcode_scanner.dart';
 import 'package:map_project/order_page.dart';
 import 'package:map_project/user_profile.dart';
 import 'package:map_project/models/productModel.dart';
+import 'package:map_project/product_browsing.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -121,7 +121,7 @@ class _HomePageState extends State<HomePage> {
       case 3:
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => ProductBrowsingPage()),
+          MaterialPageRoute(builder: (context) => CartPage()),
         );
         break;
       case 4:
@@ -141,7 +141,6 @@ class _HomePageState extends State<HomePage> {
         leading: IconButton(
           icon: Icon(Icons.sick_outlined),
           onPressed: () {
-            // Add your onPressed code here!
             Navigator.pushReplacement(
                 context, MaterialPageRoute(builder: (context) => OrderPage()));
           },
@@ -155,6 +154,17 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.orange,
         centerTitle: true,
         elevation: 10.0,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ProductBrowsingPage()),
+              );
+            },
+          ),
+        ],
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

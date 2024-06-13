@@ -115,7 +115,7 @@ class _BarcodeScanner extends State<BarcodeScanner> {
                 price: documentData['Price'],
                 imageUrl: documentData['imageUrl'],
                 category: documentData['Category'],
-                discountedPrice: documentData['DiscountedPrice'],
+                discountedPrice: documentData['DiscountedPrice'].toDouble(),
               );
               Provider.of<Cart>(context, listen: false).addProduct(product);
               showToast(message: "Product added to the cart.");
