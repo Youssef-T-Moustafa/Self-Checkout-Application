@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:map_project/homepage.dart';
 import 'package:map_project/models/cartModel.dart';
-import 'package:map_project/user_profile.dart';
 import 'package:flutter/foundation.dart';
 import 'package:map_project/log_in.dart';
 import 'package:map_project/sign_up.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:map_project/log_in.dart';
+import 'package:map_project/product_browsing.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -43,6 +47,9 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: HomePage(),
+      routes: {
+        '/product_browsing': (context) => ProductBrowsingPage(),
+      },
     );
   }
 }
