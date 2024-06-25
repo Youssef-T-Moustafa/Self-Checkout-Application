@@ -22,25 +22,29 @@ app.get('/', (req, res) => {
 });
 
 app.post('/send-receipt', (req, res) => {
-    const { receiptDetails } = req.body;
+    const { receiptDetails, email } = req.body;
+
+    if (!email) {
+        console.log('No email address provided');
+        return res.status(400).send('Email address is required');
+    }
 
     const mailOptions = {
         from: 'MS_d5uAHz@trial-o65qngkvnp8lwr12.mlsender.net',
-        to: 'youssef.ezzat@graduate.utm.my',
+        to: email,
         subject: 'Payment Receipt',
         text: `Thank you for your payment. Here are your receipt details: ${receiptDetails}`
     };
 
+    console.log('Sending email to:', email);
+    console.log('Email details:', mailOptions);
+
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
-            console.error(error);
+            console.error('Error sending email:', error);
             return res.status(500).send(error.toString());
         }
+        console.log('Email sent:', info.response);
         res.status(200).send('Email sent: ' + info.response);
     });
-});
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
 });

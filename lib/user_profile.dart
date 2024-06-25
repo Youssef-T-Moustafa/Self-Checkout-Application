@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:map_project/homepage.dart';
+import 'package:map_project/services/toast.dart';
 
 class UserProfile extends StatefulWidget {
   @override
@@ -30,6 +31,7 @@ class _UserProfileState extends State<UserProfile> {
         'phoneNumber': _phoneNumberController.text,
       });
     }
+    showToast(message: "Changes saved successfully");
   }
 
   @override
