@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:map_project/models/productModel.dart';
+import 'package:map_project/models/cartModel.dart';
+import 'package:map_project/services/toast.dart'; // Assuming you have a toast service
 
 class ProductBrowsingPage extends StatefulWidget {
   @override
@@ -92,6 +95,36 @@ class _ProductBrowsingPageState extends State<ProductBrowsingPage> {
   ];
   String _searchQuery = '';
 
+  void _showAddToCartDialog(Product product) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Add to Cart'),
+          content: Text('Do you want to add ${product.name} to the cart?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Add to Cart'),
+              onPressed: () {
+                Provider.of<Cart>(context, listen: false).addProduct(product);
+                Navigator.of(context).pop();
+                showToast(
+                    message:
+                        'Added to cart'); // Assuming you have a toast service
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -133,6 +166,9 @@ class _ProductBrowsingPageState extends State<ProductBrowsingPage> {
                         Image.asset(product.imageUrl, width: 50, height: 50),
                     title: Text(product.name),
                     subtitle: Text(product.description),
+                    onTap: () {
+                      _showAddToCartDialog(product);
+                    },
                   ),
                 );
               },

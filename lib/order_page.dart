@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:map_project/cart_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:map_project/cart_page.dart';
 import 'package:map_project/barcode_scanner.dart';
 import 'package:map_project/homepage.dart';
 import 'package:map_project/user_profile.dart';
@@ -35,8 +35,13 @@ class _OrderPageState extends State<OrderPage> {
         backgroundColor: Colors.orange, // Set the AppBar color to orange
         centerTitle: true, // Center the title
         elevation: 10.0, // Add some shadow
+        leading: BackButton(
+          onPressed: () {
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: ((context) => HomePage())));
+          },
+        ),
       ),
-
       body: FutureBuilder<List<DocumentSnapshot>>(
         future: fetchData(),
         builder: (context, snapshot) {
@@ -50,70 +55,34 @@ class _OrderPageState extends State<OrderPage> {
             return ListView(
               children: snapshot.data!.map((document) {
                 var data = document.data() as Map<String, dynamic>;
-                return ListTile(
-                  title: Text(data['Item'] ?? 'No Item'),
-                  subtitle: Text("Bought on: ${data['Date'] ?? 'No data'}"),
-                  trailing: Text("\$ ${data['Price'] ?? 'No Item'}",
-                    style: TextStyle(fontSize: 18), // Set the font size to 18
-                  ),
-                  isThreeLine: true,
+                var items = List<Map<String, dynamic>>.from(data['items']);
+                var orderItems = items.map((item) {
+                  return ListTile(
+                    title: Text(item['name'] ?? 'No Item'),
+                    subtitle: Text('${item['quantity']} x \RM${item['price']}'),
+                    trailing: Text('\RM${item['total']}'),
+                  );
+                }).toList();
+                return ExpansionTile(
+                  title: Text(
+                      "Order placed on ${data['date'].toDate().toLocal()}"),
+                  subtitle: Text("Total: \RM${data['total']}"),
+                  children: [
+                    ListTile(
+                      title: Text("Delivery Address"),
+                      subtitle: Text(data['address'] ?? 'No Address'),
+                    ),
+                    ListTile(
+                      title: Text("Delivery Option"),
+                      subtitle:
+                          Text(data['deliveryOption'] ?? 'No Delivery Option'),
+                    ),
+                    ...orderItems,
+                  ],
                 );
               }).toList(),
             );
           }
-        },
-      ),
-
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Colors.grey, // Set the color of the selected item
-        unselectedItemColor:
-            Colors.black, // Set the color of the unselected items
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.notifications),
-            label: 'Notifications',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.qr_code),
-            label: 'Scanner',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
-            label: 'Cart',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
-        onTap: (index) {
-          switch (index) {
-            case 0:
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => HomePage()));
-              break;
-            case 1:
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => HomePage()));
-              break;
-            case 2:
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => BarcodeScanner()));
-              break;
-            case 3:
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => CartPage()));
-              break;
-            case 4:
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => UserProfile()));
-              break;
-          }
-
         },
       ),
     );
