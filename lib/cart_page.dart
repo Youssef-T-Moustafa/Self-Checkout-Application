@@ -53,7 +53,7 @@ class CartPage extends StatelessWidget {
                               cart.increaseProductQuantity(product);
                             },
                           ),
-                          Text('\$${product.price.toStringAsFixed(2)}'),
+                          Text('\RM${product.price.toStringAsFixed(2)}'),
                         ],
                       ),
                     );

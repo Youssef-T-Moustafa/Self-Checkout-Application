@@ -274,14 +274,14 @@ class _HomePageState extends State<HomePage> {
                               ),
                               SizedBox(height: 5),
                               Text(
-                                '\$${product.discountedPrice.toStringAsFixed(2)}',
+                                '\RM${product.discountedPrice.toStringAsFixed(2)}',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.green,
                                 ),
                               ),
                               Text(
-                                '\$${product.price.toStringAsFixed(2)}',
+                                '\RM${product.price.toStringAsFixed(2)}',
                                 style: TextStyle(
                                   decoration: TextDecoration.lineThrough,
                                   color: Colors.red,

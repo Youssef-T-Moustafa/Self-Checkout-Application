@@ -42,9 +42,20 @@ app.post('/send-receipt', (req, res) => {
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
             console.error('Error sending email:', error);
-            return res.status(500).send(error.toString());
+            return res.status(500).send('Error sending email: ' + error.toString());
         }
         console.log('Email sent:', info.response);
         res.status(200).send('Email sent: ' + info.response);
     });
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });

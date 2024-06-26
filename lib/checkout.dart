@@ -4,7 +4,8 @@ import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:map_project/models/productModel.dart';
 import 'package:map_project/models/cartModel.dart';
-import 'package:map_project/order_page.dart'; // Ensure this import is correct
+import 'package:map_project/order_page.dart';
+import 'package:map_project/receipt_page.dart'; // Ensure this import is correct
 
 class CheckoutPage extends StatefulWidget {
   final Cart cart;
@@ -79,9 +80,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
   void onPaymentSuccess() async {
     String receiptDetails = widget.cart.products.entries
             .map((entry) =>
-                '${entry.value} x ${entry.key.name} (\$${entry.key.price})')
+                '${entry.value} x ${entry.key.name} (\RM${entry.key.price.toStringAsFixed(2)})')
             .join(', ') +
-        '. Total: \$${widget.cart.totalPrice}';
+        '. Total: \RM${widget.cart.totalPrice.toStringAsFixed(2)}';
 
     String email =
         "engineerloai108@gmail.com"; // Replace with the actual recipient email
@@ -89,23 +90,15 @@ class _CheckoutPageState extends State<CheckoutPage> {
     await sendReceiptEmail(receiptDetails, email);
     await saveOrderToFirestore();
 
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Payment Confirmed'),
-          actions: <Widget>[
-            TextButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => OrderPage()));
-              },
-            ),
-          ],
-        );
-      },
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ReceiptPage(
+          cart: widget.cart,
+          deliveryOption: deliveryOption!,
+          paymentOption: paymentOption!,
+        ),
+      ),
     );
   }
 
