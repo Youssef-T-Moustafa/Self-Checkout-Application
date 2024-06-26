@@ -9,6 +9,8 @@ import 'package:map_project/order_page.dart';
 import 'package:map_project/user_profile.dart';
 import 'package:map_project/models/productModel.dart';
 import 'package:map_project/product_browsing.dart';
+import 'package:provider/provider.dart';
+import 'package:map_project/models/cartModel.dart'; // Import cart model
 
 class HomePage extends StatefulWidget {
   @override
@@ -111,7 +113,10 @@ class _HomePageState extends State<HomePage> {
         // Home
         break;
       case 1:
-        // Notifications
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => OrderPage()),
+        );
         break;
       case 2:
         Navigator.push(
@@ -134,17 +139,52 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  Future<void> _signOut() async {
+    await FirebaseAuth.instance.signOut();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+          builder: (context) => LoginPage()), // Replace with your login page
+    );
+  }
+
+  void _showAddToCartDialog(Product product) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Add to Cart'),
+          content: Text('Do you want to add ${product.name} to the cart?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Add to Cart'),
+              onPressed: () {
+                Provider.of<Cart>(context, listen: false).addProduct(product);
+                Navigator.of(context).pop();
+                showToast(
+                    message: 'Added to cart'); // Optional: show a toast message
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.orange[50],
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.sick_outlined),
-          onPressed: () {
-            Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (context) => OrderPage()));
-          },
+          icon: Icon(Icons.logout),
+          onPressed: _signOut,
         ),
         title: Text(
           'Home Page',
@@ -192,61 +232,66 @@ class _HomePageState extends State<HomePage> {
               itemCount: _products.length,
               itemBuilder: (context, index) {
                 final product = _products[index];
-                return Card(
-                  margin: EdgeInsets.all(5.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(10),
-                            topRight: Radius.circular(10),
-                          ),
-                          child: Image.asset(
-                            product.imageUrl,
-                            fit: BoxFit.cover,
-                            width: double.infinity,
+                return InkWell(
+                  onTap: () {
+                    _showAddToCartDialog(product);
+                  },
+                  child: Card(
+                    margin: EdgeInsets.all(5.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              topRight: Radius.circular(10),
+                            ),
+                            child: Image.asset(
+                              product.imageUrl,
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                            ),
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              product.name,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                product.name,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                            SizedBox(height: 5),
-                            Text(
-                              product.description,
-                              style: TextStyle(
-                                color: Colors.grey[600],
+                              SizedBox(height: 5),
+                              Text(
+                                product.description,
+                                style: TextStyle(
+                                  color: Colors.grey[600],
+                                ),
                               ),
-                            ),
-                            SizedBox(height: 5),
-                            Text(
-                              '\$${product.discountedPrice.toStringAsFixed(2)}',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.green,
+                              SizedBox(height: 5),
+                              Text(
+                                '\$${product.discountedPrice.toStringAsFixed(2)}',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.green,
+                                ),
                               ),
-                            ),
-                            Text(
-                              '\$${product.price.toStringAsFixed(2)}',
-                              style: TextStyle(
-                                decoration: TextDecoration.lineThrough,
-                                color: Colors.red,
+                              Text(
+                                '\$${product.price.toStringAsFixed(2)}',
+                                style: TextStyle(
+                                  decoration: TextDecoration.lineThrough,
+                                  color: Colors.red,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 );
               },
@@ -265,8 +310,8 @@ class _HomePageState extends State<HomePage> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.notifications),
-            label: 'Notifications',
+            icon: Icon(Icons.history),
+            label: 'History',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.qr_code),
@@ -281,30 +326,6 @@ class _HomePageState extends State<HomePage> {
             label: 'Profile',
           ),
         ],
-        onTap: (index) {
-          switch (index) {
-            case 0:
-              Navigator.pushReplacement(
-                  context, MaterialPageRoute(builder: (context) => HomePage()));
-              break;
-            case 1:
-              Navigator.pushReplacement(
-                  context, MaterialPageRoute(builder: (context) => HomePage()));
-              break;
-            case 2:
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => BarcodeScanner()));
-              break;
-            case 3:
-              Navigator.pushReplacement(
-                  context, MaterialPageRoute(builder: (context) => CartPage()));
-              break;
-            case 4:
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => UserProfile()));
-              break;
-          }
-        },
       ),
     );
   }
